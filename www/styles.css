@@ -1,0 +1,130 @@
+/* Define uma altura mínima para as abas */
+.tab-pane {
+  min-height: 75vh !important;
+}
+
+/* Elimina espaçamento extra entre conteúdos das abas */
+.bslib-gap-spacing {
+  gap: 0;
+}
+
+/*** Aba de ano ***/
+/* Centraliza o conteúdo da aba */
+#containter-ano {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Mensagem de alerta aos usuários */
+#disclaimer {
+  display: flex;
+  max-width: 100%;
+  width: 340px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+#disclaimer p {
+  margin: 0;
+}
+
+#disclaimer p:first-of-type {
+  font-size: 2em;
+}
+
+#disclaimer p:last-of-type {
+  font-size: 0.8em;
+}
+
+#disclaimer span {
+  color: #e90000;
+}
+
+/*** Aba de clubes ***/
+/* Centraliza as listas */
+.default-sortable.bucket-list {
+  justify-content: center;
+}
+
+/* Elimina as dimensões padrão das listas */
+.default-sortable.rank-list-container {
+  flex: none !important;
+}
+
+/* Centraliza os elementos nos itens e altera o padding */
+.default-sortable .rank-list-item {
+  display: flex !important;
+  padding: 7px !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Controla a disposição dos itens nas listas */
+.default-sortable .rank-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 5px;
+  padding: 20px;
+}
+
+#rank-list-rank_list_1 {
+  width: 100%;
+}
+
+/* Esconde e destaca o nome dos clubes */
+#rank-list-rank_list_1 .time {
+  font-size: 0em;
+}
+
+#rank-list-rank_list_2 .time {
+  font-size: 0.5em;
+}
+
+/* Define limites para os escudos e
+os destaca na lista de versus */
+.escudo {
+  max-height: 23px;
+  max-width: 23px;
+  width: 23px;
+}
+
+#rank-list-rank_list_2 .escudo {
+  max-height: 60px;
+  max-width: 60px;
+  width: 60px;
+}
+
+/* Elimina espaço extra na lista de versus */
+#rank_list_2 {
+  padding: 7px;
+}
+
+/* Elimina margem extra nos títulos da lista */
+.rank-list-title {
+  margin: 0;
+}
+
+/* Gera um X na lista de versus */
+#rank_list_2 {
+  background-image: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  gap: 40px;
+}
+
+.versus {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='50px'><text x='15' y='35' font-size='30' font-weight='bold'>X</text></svg>") !important;
+}
+
+/* Torna elementos inacessíveis com o mouse */
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
