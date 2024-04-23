@@ -14,7 +14,7 @@ library(dplyr)
 modelo <- readRDS("assets/modelo.rds")
 
 ## Carrega os resultados
-resultados <- readRDS("assets/resultados.RDS")
+dataset_jogos <- readRDS("assets/resultados.RDS")
 
 ## Associa as diferentes formas dos nomes dos clubes
 dicionario <- dplyr::tibble(
@@ -62,64 +62,61 @@ ui <- page_fillable (
     
     layout_columns(
         col_widths = c(12, 12),
-    navset_card_underline(
-        id = "navegacao",
-
-        ## Seleção do ano do campeonato
-        nav_panel(
-            title = "1. Ano",
+        navset_card_underline(
+            id = "navegacao",
             
-            div(
-                id = "containter-ano",
-                "PREVISÃO DO BRASILEIRÃO",
+            ## Seleção do ano do campeonato
+            nav_panel(
+                title = "1. Ano",
                 
                 div(
-                    id = "disclaimer",
-                    p("⚠️"),
-                    p("Esse app é um simples exercício.",
-                      span("Não o use para realizar apostas esportivas."))
-                ),
-                
-                selectizeInput(
-                    inputId = "ano",
-                    label = "Ano do campeonato",
-                    choices = 2014:2024,
-                    selected = 2024,
-                    width = "300px"
-                ),
-                actionBttn(
-                    inputId = "acessar",
-                    label = "Escolher clubes",
-                    size = "lg",
-                    style = "minimal",
-                    color = "primary"
+                    id = "containter-ano",
+                    div("PREVISÃO DO BRASILEIRÃO", id = "app-title"),
+                    
+                    selectizeInput(
+                        inputId = "ano",
+                        label = "Ano do campeonato",
+                        choices = 2014:2024,
+                        selected = 2024,
+                        width = "300px"
+                    ),
+                    actionBttn(
+                        inputId = "acessar",
+                        label = "Escolher clubes",
+                        size = "lg",
+                        style = "minimal",
+                        color = "primary"
+                    )
+                    
                 )
-                
+            ),
+            
+            ## Seleção dos clubes a comparar
+            nav_panel(
+                title = "2. Clubes",
+                uiOutput("listas"),
+                uiOutput("resultado")
             )
         ),
         
-        ## Seleção dos clubes a comparar
-        nav_panel(
-            title = "2. Clubes",
-            uiOutput("listas"),
-            uiOutput("resultado")
-        ),
+        ## Card de rodapé
+        card(
+            fill = FALSE,
+            card_body(
+                class = "bg-dark",
+                div(
+                    id = "footer",
+                    div("Modelo: Quemuel Baruque | App: Ícaro Bernardes | Dados: FBref"),
+                    div(
+                        id = "disclaimer",
+                        p("⚠️"),
+                        p("Esse app é um simples exercício.",br(),
+                          span("Não o use para realizar apostas esportivas."))
+                    )
+                )
+            )
+        )
         
-        ## Exibição dos resultados
-        nav_panel(
-            title = "3. Previsão",
-            "Dynamically added content"
-        )
-    ),
-    
-    card(
-        fill = FALSE,
-        card_body(
-            class = "bg-dark",
-            "Modelo: Quemuel Baruque | App: Ícaro Bernardes | Dados: FBref"
-        )
-    )
-    
     )
     
 )
@@ -138,7 +135,7 @@ server <- function(input, output) {
         req(input$ano)
         
         ### Lista os nomes dos clubes que competem no ano selecionado
-        times <- resultados |> 
+        times <- dataset_jogos |> 
             dplyr::filter(season_end_year == input$ano) |> 
             dplyr::pull(home) |> 
             unique()
@@ -179,15 +176,6 @@ server <- function(input, output) {
         
     })
     
-    ## Condiciona a exibição dos resultados à seleção de um par de clubes
-    observe({
-        if (length(input$rank_list_2) == 2) {
-            nav_show("navegacao", target = "3. Previsão")
-        } else {
-            nav_hide("navegacao", target = "3. Previsão")
-        }
-    })
-    
     ## Controla a habilitação da lista de seleção e
     ## a exibição do "X" de versus
     observeEvent(req(input$rank_list_2), {
@@ -211,12 +199,12 @@ server <- function(input, output) {
         
         req(input$rank_list_2)
         if (length(input$rank_list_2) >= 2) {
-            dados <- resultados |> 
+            dados <- dataset_jogos |> 
                 dplyr::filter(season_end_year == input$ano,
                               home == input$rank_list_2[1],
                               away == input$rank_list_2[2])
             
-            predict(modelo, dados, type = "class")
+            stats::predict(modelo, dados, type = "class")
         } else {
             NULL
         }
@@ -235,11 +223,17 @@ server <- function(input, output) {
             "lose" ~ "DERROTA"
         )
         
-        div(strong(status), "DO MANDANTE", style = "text-align:center;")
+        col <- dplyr::case_match(
+            predicao(),
+            "win" ~ "#12780b",
+            "draw" ~ "#78700b",
+            "lose" ~ "#cf2211"
+        )
+        
+        div(strong(status, style = glue::glue("color:{col};")),
+            "DO MANDANTE", style = "text-align:center;")
         
     })
-    
-    
     
 }
 

@@ -8,22 +8,29 @@
   gap: 0;
 }
 
-/*** Aba de ano ***/
-/* Centraliza o conteúdo da aba */
-#containter-ano {
+/* Título do app */
+#app-title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  margin: 20px 0 30px 0;
+}
+
+/*** Footer ***/
+#footer {
   display: flex;
   align-items: center;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* Mensagem de alerta aos usuários */
 #disclaimer {
   display: flex;
-  max-width: 100%;
-  width: 340px;
   align-items: center;
   gap: 10px;
-  margin-bottom: 30px;
 }
 
 #disclaimer p {
@@ -39,7 +46,15 @@
 }
 
 #disclaimer span {
-  color: #e90000;
+  color: #e9e200;
+}
+
+/*** Aba de ano ***/
+/* Centraliza o conteúdo da aba */
+#containter-ano {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 /*** Aba de clubes ***/
@@ -106,9 +121,10 @@ os destaca na lista de versus */
   padding: 7px;
 }
 
-/* Elimina margem extra nos títulos da lista */
+/* Títulos das listas */
 .rank-list-title {
   margin: 0;
+  text-align: center;
 }
 
 /* Gera um X na lista de versus */
