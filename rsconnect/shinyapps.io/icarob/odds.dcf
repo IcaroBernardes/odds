@@ -1,0 +1,13 @@
+name: odds
+title: odds
+username: icarob
+account: icarob
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11846404
+bundleId: 8533561
+url: https://icarob.shinyapps.io/odds/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: assets/dados.R

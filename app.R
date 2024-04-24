@@ -9,6 +9,7 @@ library(shinyjs)
 library(stringr)
 library(shinyWidgets)
 library(dplyr)
+library(nnet)
 
 ## Carrega o modelo
 modelo <- readRDS("assets/modelo.rds")
