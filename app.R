@@ -10,6 +10,7 @@ library(stringr)
 library(shinyWidgets)
 library(dplyr)
 library(nnet)
+library(shinyalert)
 
 ## Carrega o modelo
 modelo <- readRDS("assets/modelo.rds")
@@ -57,9 +58,10 @@ dicionario <- dplyr::tibble(
 # 1. UI ################
 ui <- page_fillable (
     
-    ## Inclui o CSS e o controle de JS
+    ## Inclui o CSS, o controle de JS e alertas
     tags$head(includeCSS("www/styles.css")),
     shinyjs::useShinyjs(),
+    useShinyalert(),
     
     layout_columns(
         col_widths = c(12, 12),
@@ -85,7 +87,7 @@ ui <- page_fillable (
                         inputId = "acessar",
                         label = "Escolher clubes",
                         size = "lg",
-                        style = "minimal",
+                        style = "material-flat",
                         color = "primary"
                     )
                     
@@ -123,7 +125,24 @@ ui <- page_fillable (
 )
 
 # 2. Server ################
-server <- function(input, output) {
+server <- function(input, output, session) {
+    
+    ## Popup de alerta
+    shinyalert(
+        title = "Esse app é um simples exercício",
+        text = "Não o use para realizar apostas esportivas",
+        size = "s", 
+        closeOnEsc = TRUE,
+        html = TRUE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        showCancelButton = FALSE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#1d89ff",
+        timer = 0,
+        imageUrl = "",
+        animation = TRUE
+    )
     
     ## Seleciona a 2a aba com o clique no botão de acesso
     observeEvent(req(input$acessar),{
@@ -231,8 +250,13 @@ server <- function(input, output) {
             "lose" ~ "#cf2211"
         )
         
+        clube <- dicionario |> 
+            dplyr::filter(dados == input$rank_list_2[1]) |> 
+            dplyr::pull(simples) |> 
+            toupper()
+        
         div(strong(status, style = glue::glue("color:{col};")),
-            "DO MANDANTE", style = "text-align:center;")
+            "DO", clube, style = "text-align:center;")
         
     })
     
